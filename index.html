@@ -3,28 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Camera App</title>
+  <title>Gesture-Controlled Image App</title>
   <style>
+    body { font-family: sans-serif; text-align: center; }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 20px;
+    }
+    .image-grid img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+    .selected {
+      border-color: red;
+    }
     video, canvas {
-      border: 1px solid black;
-      width: 100%;
+      margin-top: 20px;
       max-width: 400px;
-      display: none; /* Hidden by default */
+      width: 100%;
+      display: none;
+    }
+    #controls {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Camera App</h1>
 
-  <!-- Button to show camera -->
-  <button id="start-camera">Show Camera</button>
+  <h1>Select an Image to Control</h1>
 
-  <!-- Video and snap button will appear after camera is enabled -->
-  <video id="video" autoplay></video><br>
-  <button id="snap" style="display: none;">Take Picture</button>
+  <!-- 7 Preloaded Images -->
+  <div class="image-grid" id="imageGrid">
+    <img src="img1.jpg" alt="img1">
+    <img src="img2.jpg" alt="img2">
+    <img src="img3.jpg" alt="img3">
+    <img src="img4.jpg" alt="img4">
+    <img src="img5.jpg" alt="img5">
+    <img src="img6.jpg" alt="img6">
+    <img src="img7.jpg" alt="img7">
+  </div>
+
+  <!-- Video Feed -->
+  <video id="video" autoplay></video>
+  <div id="controls">
+    <button id="startGesture" style="display: none;">Start Gesture Recognition</button>
+  </div>
 
   <canvas id="canvas" style="display: none;"></canvas>
 
   <script src="app.js"></script>
 </body>
-</html> 
+</html>
