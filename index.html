@@ -9,15 +9,22 @@
       border: 1px solid black;
       width: 100%;
       max-width: 400px;
+      display: none; /* Hidden by default */
     }
   </style>
 </head>
 <body>
-  <h1>Camera Access</h1>
-  <video id="video" autoplay></video>
-  <button id="snap">Take Picture</button>
-  <canvas id="canvas"></canvas>
+  <h1>Camera App</h1>
+
+  <!-- Button to show camera -->
+  <button id="start-camera">Show Camera</button>
+
+  <!-- Video and snap button will appear after camera is enabled -->
+  <video id="video" autoplay></video><br>
+  <button id="snap" style="display: none;">Take Picture</button>
+
+  <canvas id="canvas" style="display: none;"></canvas>
 
   <script src="app.js"></script>
 </body>
-</html>
+</html> 
