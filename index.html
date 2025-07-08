@@ -1,21 +1,24 @@
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const snapButton = document.getElementById('snap');
-const context = canvas.getContext('2d');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Camera App</title>
+  <style>
+    video, canvas {
+      border: 1px solid black;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Camera Access</h1>
+  <video id="video" autoplay></video>
+  <button id="snap">Take Picture</button>
+  <canvas id="canvas"></canvas>
 
-// Ask for access to the camera
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then((stream) => {
-    video.srcObject = stream;
-  })
-  .catch((err) => {
-    console.error('Error accessing the camera:', err);
-  });
-
-// Capture frame on button click
-snapButton.addEventListener('click', () => {
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-});
+  <script src="app.js"></script>
+</body>
+</html>
 
