@@ -3,56 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gesture-Controlled Image App</title>
+  <title>Camera App</title>
   <style>
-    body { font-family: sans-serif; text-align: center; }
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-      margin: 20px;
-    }
-    .image-grid img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border: 2px solid transparent;
-      cursor: pointer;
-    }
-    .selected {
-      border-color: red;
-    }
     video, canvas {
-      margin-top: 20px;
-      max-width: 400px;
+      border: 1px solid black;
       width: 100%;
-      display: none;
-    }
-    #controls {
-      margin-top: 10px;
+      max-width: 400px;
+      display: none; /* Hidden by default */
     }
   </style>
 </head>
 <body>
+  <h1>Camera App</h1>
 
-  <h1>Select an Image to Control</h1>
+  <!-- Button to show camera -->
+  <button id="start-camera">Show Camera</button>
 
-  <!-- 7 Preloaded Images -->
-  <div class="image-grid" id="imageGrid">
-    <img src="https://files.slack.com/files-pri/T020GUFVC2H-F094PA30P9T/q-a-on-my-work-as-a-marine-biologist-with-harbour-seals-sea-v0-1oqgtohfetkb1.webp" alt="img1">
-    <img src="https://files.slack.com/files-pri/T020GUFVC2H-F094PA30P9T/q-a-on-my-work-as-a-marine-biologist-with-harbour-seals-sea-v0-1oqgtohfetkb1.webp" alt="img2">
-    <img src="img3.jpg" alt="img3">
-    <img src="img4.jpg" alt="img4">
-    <img src="img5.jpg" alt="img5">
-    <img src="img6.jpg" alt="img6">
-    <img src="img7.jpg" alt="img7">
-  </div>
-
-  <!-- Video Feed -->
-  <video id="video" autoplay></video>
-  <div id="controls">
-    <button id="startGesture" style="display: none;">Start Gesture Recognition</button>
-  </div>
+  <!-- Video and snap button will appear after camera is enabled -->
+  <video id="video" autoplay></video><br>
+  <button id="snap" style="display: none;">Take Picture</button>
 
   <canvas id="canvas" style="display: none;"></canvas>
 
