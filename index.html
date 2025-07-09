@@ -4,17 +4,17 @@
   <title>Gesture Recognition</title>
 </head>
 <body>
-  <h1>Gesture Recognition</h1>
-  <input type="file" id="imageInput" accept="image/*">
-  <button onclick="submitImage()">Predict</button>
+  <h1>Upload a Video for Gesture Recognition</h1>
+  <input type="file" id="videoInput" accept="video/*">
+  <button onclick="submitVideo()">Predict</button>
   <p id="result"></p>
 
   <script>
-    async function submitImage() {
-      const input = document.getElementById('imageInput');
+    async function submitVideo() {
+      const input = document.getElementById('videoInput');
       const file = input.files[0];
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append('video', file);
 
       const res = await fetch('/predict', {
         method: 'POST',
