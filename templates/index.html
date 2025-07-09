@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Gesture Recognition</title>
+  <title>Gesture Prediction</title>
 </head>
 <body>
-  <h1>Upload a Video for Gesture Recognition</h1>
+  <h1>Upload a video to predict gesture</h1>
   <input type="file" id="videoInput" accept="video/*">
   <button onclick="submitVideo()">Predict</button>
   <p id="result"></p>
 
   <script>
     async function submitVideo() {
+      console.log("submitVideo called");  // Debug
       const input = document.getElementById('videoInput');
       const file = input.files[0];
+      if (!file) {
+        alert("Please select a video file first.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append('video', file);
 
-      const res = await fetch('/predict', {
-        method: 'POST',
-        body: formData
-      });
+      try {
+        const res = await fetch('/predict', {
+          method: 'POST',
+          body: formData
+        });
 
-      const data = await res.json();
-      document.getElementById('result').textContent = `Prediction: ${data.prediction}`;
+        const data = await res.json();
+        document.getElementById('result').textContent = `Prediction: ${data.prediction}`;
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Something went wrong.");
+      }
     }
   </script>
 </body>
