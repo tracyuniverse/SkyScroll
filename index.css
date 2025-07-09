@@ -2,10 +2,22 @@
 
 body {
     font-family: 'Poppins', sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
 }
 
+#about {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
 
 #about h1 {
-    font-size:45px;
-    word-wrap:break-word;
+    font-size: 45px;
+    font-weight: bold;
+    color: black;
+    margin: 0;
+    word-wrap: break-word;
 }
