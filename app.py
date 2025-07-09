@@ -9,18 +9,20 @@ import tempfile
 
 app = Flask(__name__)
 
-# Load your model
-model = torch.load('model/gesture_model.pt', map_location=torch.device('cpu'))
+# Dummy model logic (replace this with your actual model)
+class DummyModel:
+    def eval(self): pass
+    def __call__(self, x): return torch.tensor([[0.1, 0.9]])
+
+model = DummyModel()
 model.eval()
 
-# Define transforms
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor()
 ])
 
 def extract_frames(video_path, frame_count=5):
-    """Extract a few evenly spaced frames from the video"""
     cap = cv2.VideoCapture(video_path)
     total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     frames = []
@@ -31,7 +33,6 @@ def extract_frames(video_path, frame_count=5):
         if ret:
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             frames.append(transform(img))
-
     cap.release()
     return frames
 
@@ -45,16 +46,15 @@ def predict():
         return jsonify({'error': 'No video uploaded'})
 
     video_file = request.files['video']
-    
+
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_vid:
         video_file.save(temp_vid.name)
         frames = extract_frames(temp_vid.name)
 
     if not frames:
-        return jsonify({'error': 'No frames extracted from video'})
+        return jsonify({'error': 'No frames extracted'})
 
     input_batch = torch.stack(frames)
-
     with torch.no_grad():
         outputs = model(input_batch)
         avg_output = outputs.mean(dim=0)
