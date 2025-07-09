@@ -3,18 +3,37 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import io
+import os
+import cv2
+import tempfile
 
-app = Flask(skyscroll)
+app = Flask(__name__)
 
-# Load your trained model
-model = torch.load('Gesture_Recongition_Code.ipynb', map_location=torch.device('cpu'))
+# Load your model
+model = torch.load('model/gesture_model.pt', map_location=torch.device('cpu'))
 model.eval()
 
-# Define the preprocessing to match your training
+# Define transforms
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor()
 ])
+
+def extract_frames(video_path, frame_count=5):
+    """Extract a few evenly spaced frames from the video"""
+    cap = cv2.VideoCapture(video_path)
+    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    frames = []
+
+    for i in range(frame_count):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i * total // frame_count)
+        ret, frame = cap.read()
+        if ret:
+            img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            frames.append(transform(img))
+
+    cap.release()
+    return frames
 
 @app.route('/')
 def index():
@@ -22,18 +41,26 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image uploaded'})
+    if 'video' not in request.files:
+        return jsonify({'error': 'No video uploaded'})
 
-    file = request.files['image']
-    img_bytes = file.read()
-    img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
-    img = transform(img).unsqueeze(0)
+    video_file = request.files['video']
+    
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_vid:
+        video_file.save(temp_vid.name)
+        frames = extract_frames(temp_vid.name)
+
+    if not frames:
+        return jsonify({'error': 'No frames extracted from video'})
+
+    input_batch = torch.stack(frames)
 
     with torch.no_grad():
-        output = model(img)
-        predicted_class = output.argmax(dim=1).item()
+        outputs = model(input_batch)
+        avg_output = outputs.mean(dim=0)
+        predicted_class = avg_output.argmax().item()
 
+    os.remove(temp_vid.name)
     return jsonify({'prediction': str(predicted_class)})
 
 if __name__ == '__main__':
