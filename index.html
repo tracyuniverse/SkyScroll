@@ -1,37 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>skyscroll</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Poppins');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: white;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-        }
-        
-        #about {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-        
-        #about h1 {
-            font-size: 45px;
-            font-weight: bold;
-            color: black;
-            margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
-    <div id="about">
-        <h1>Your Name</h1>
+    <div id="container">
+        <div id="left">
+            <h1 id="title">skyscroll</h1>
+            <input type="file" id="imageUpload" accept="image/*"/>
+            <div id="uploadedImagePreview"></div>
+        </div>
+        <div id="right">
+            <img id="sealImage" src="seal.png" alt="Seal" />
+        </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
