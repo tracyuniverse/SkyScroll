@@ -1,23 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>skyscroll</title>
-    <link rel="stylesheet" href="style.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <title>Gesture Recognition</title>
 </head>
 <body>
-    <div id="container">
-        <div id="left">
-            <h1 id="title">skyscroll</h1>
-            <input type="file" id="imageUpload" accept="image/*"/>
-            <div id="uploadedImagePreview"></div>
-        </div>
-        <div id="right">
-            <img id="sealImage" src="https://preview.redd.it/q-a-on-my-work-as-a-marine-biologist-with-harbour-seals-sea-v0-1oqgtohfetkb1.jpg?width=1080&crop=smart&auto=webp&s=9c681c6360d59745e1ade3b166ce58cd9e813de7" alt="Seal" />
-        </div>
-    </div>
-    <script src="script.js"></script>
+  <h1>Gesture Recognition</h1>
+  <input type="file" id="imageInput" accept="image/*">
+  <button onclick="submitImage()">Predict</button>
+  <p id="result"></p>
+
+  <script>
+    async function submitImage() {
+      const input = document.getElementById('imageInput');
+      const file = input.files[0];
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const res = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      document.getElementById('result').textContent = `Prediction: ${data.prediction}`;
+    }
+  </script>
 </body>
 </html>
