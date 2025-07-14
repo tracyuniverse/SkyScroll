@@ -1,29 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Gesture Recognition</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyScroll Gesture Recognition</title>
+    <style>
+        /* A little style to make it look nicer */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; text-align: center; margin-top: 40px; background-color: #f4f4f9; }
+        h1 { color: #333; }
+        #container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-left: 10px; }
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        #result { margin-top: 20px; font-size: 1.2em; font-weight: bold; color: #28a745; }
+        #status { margin-top: 15px; color: #6c757d; height: 20px; }
+    </style>
 </head>
 <body>
-  <h1>Upload a Video for Gesture Recognition</h1>
-  <input type="file" id="videoInput" accept="video/*">
-  <button onclick="submitVideo()">Predict</button>
-  <p id="result"></p>
+
+  <div id="container">
+    <h1>Upload a Video for Gesture Recognition</h1>
+    <input type="file" id="videoInput" accept="video/*">
+    <button id="predictButton">Predict</button>
+    <p id="status"></p>
+    <p id="result"></p>
+  </div>
 
   <script>
+    // Get references to our HTML elements
+    const videoInput = document.getElementById('videoInput');
+    const predictButton = document.getElementById('predictButton');
+    const resultElement = document.getElementById('result');
+    const statusElement = document.getElementById('status');
+
+    // ====================================================================
+    // !! IMPORTANT: PASTE YOUR FULL REPLIT URL HERE !!
+    // ====================================================================
+    const API_URL = "https://skyscroll.hyeshrin2003.replit.dev/predict";
+
+
+    // This function will be called when the button is clicked
     async function submitVideo() {
-      const input = document.getElementById('videoInput');
-      const file = input.files[0];
+      const file = videoInput.files[0];
+      if (!file) {
+        statusElement.textContent = 'Please select a video file first.';
+        return;
+      }
+
+      // --- Give the user feedback ---
+      statusElement.textContent = 'Uploading and processing, please wait...';
+      resultElement.textContent = '';
+      predictButton.disabled = true; // Disable the button to prevent multiple clicks
+
       const formData = new FormData();
       formData.append('video', file);
 
-      const res = await fetch('/predict', {
-        method: 'POST',
-        body: formData
-      });
+      // Use a try...catch block to handle potential errors gracefully
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: formData
+        });
 
-      const data = await res.json();
-      document.getElementById('result').textContent = `Prediction: ${data.prediction}`;
+        // Check if the server responded with an error
+        if (!response.ok) {
+            throw new Error(`Server responded with an error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Check for an error message within the JSON response from our API
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        // --- SUCCESS! Display the prediction ---
+        resultElement.textContent = `Prediction: ${data.prediction}`;
+        statusElement.textContent = 'Done!';
+
+      } catch (error) {
+        // --- ERROR! Display the error message ---
+        console.error('Prediction failed:', error);
+        resultElement.textContent = ''; // Clear any previous results
+        statusElement.textContent = `Error: ${error.message}. Please try again.`;
+      } finally {
+        // This runs whether the request succeeded or failed
+        predictButton.disabled = false; // Re-enable the button
+      }
     }
+
+    // Attach the function to the button's click event
+    predictButton.addEventListener('click', submitVideo);
+
   </script>
 </body>
 </html>
