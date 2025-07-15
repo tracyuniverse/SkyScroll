@@ -29,7 +29,7 @@
     <button id="predictButton">Predict</button>
     <p id="status"></p>
     <p id="result"></p>
-    <img src="seal.png" alt="Seal Photo" width="300">
+    <img id="sealimage" src="seal.png" alt="Seal Photo" width="300">
   </div>
 
   <script>
@@ -97,7 +97,73 @@
 
     // Attach the function to the button's click event
     predictButton.addEventListener('click', submitVideo);
+    let img = document.getElementById("sealimage");
+    if (data.prediction == "zoom_in") {
 
+        // Trigger animation
+        img.classList.add("animate__animated", "animate__zoomIn");
+
+        // Remove after animation ends to allow retriggering
+        img.addEventListener('animationend', () => {
+        img.classList.remove("animate__animated", "animate__zoomIn");
+        }, { once: true });
+
+    }
+    else if (data.prediction == "zoom_out") {
+
+        // Trigger animation
+        img.classList.add("animate__animated", "animate__zoomOut");
+
+        // Remove after animation ends to allow retriggering
+        img.addEventListener('animationend', () => {
+        img.classList.remove("animate__animated", "animate__zoomOut");
+        }, { once: true });
+
+    }
+    else if (data.prediction == "swipe_down") {
+
+        // Trigger animation
+        img.classList.add("animate__animated", "animate__slideInDown");
+
+        // Remove after animation ends to allow retriggering
+        img.addEventListener('animationend', () => {
+        img.classList.remove("animate__animated", "animate__slideInDown");
+        }, { once: true });
+
+    }
+     else if (data.prediction == "swipe_up") {
+
+        // Trigger animation
+        img.classList.add("animate__animated", "slideInUp");
+
+        // Remove after animation ends to allow retriggering
+        img.addEventListener('animationend', () => {
+        img.classList.remove("animate__animated", "slideInUp");
+        }, { once: true });
+    }
+     else if (data.prediction == "swipe_right") {
+
+        // Trigger animation
+        img.classList.add("animate__animated", "animate__slideOutRight");
+
+        // Remove after animation ends to allow retriggering
+        img.addEventListener('animationend', () => {
+        img.classList.remove("animate__animated", "animate__slideOutRight");
+        }, { once: true });
+
+    }
+    else if (data.prediction == "swipe_left") {
+
+        // Trigger animation
+        img.classList.add("animate__animated", "animate__slideOutLeft");
+
+        // Remove after animation ends to allow retriggering
+        img.addEventListener('animationend', () => {
+        img.classList.remove("animate__animated", "animate__slideOutLeft");
+        }, { once: true });
+
+    }
+    
   </script>
  
 </body>
